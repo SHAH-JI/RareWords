@@ -1,0 +1,15 @@
+python %T2T%/t2t_datagen.py --t2t_usr_dir=component --data_dir=data --tmp_dir=temp --problem=roman_urdu
+
+
+python %T2T%/t2t_trainer.py  --t2t_usr_dir=component --data_dir=data --problem=roman_urdu --model=transformer --hparams_set=transformer_roman2_urdu   --output_dir=output --train_steps=50000
+
+
+
+python %T2T%/t2t_decoder.py   --data_dir=data   --problem=roman_urdu   --model=transformer   --hparams_set=transformer_roman2_urdu   --output_dir=output   --decode_hparams="beam_size=4,alpha=0.6"   --decode_from_file=test/translate.ru --decode_to_file=test/translate.ur --t2t_usr_dir=component 
+
+
+
+python %T2T%/t2t-exporter.py --model=transformer --hparams_set=transformer_roman2_urdu --problem=roman2_urdu --data_dir=./data --output_dir=./tmp/t2t_train
+
+
+python %T2T%/t2t_decoder.py   --data_dir=./data   --problem=roman2_urdu   --model=transformer   --hparams_set=transformer_roman2_urdu   --output_dir=./output   --decode_hparams="beam_size=4,alpha=0.6"   --decode_from_file=test/translate.txt --decode_to_file=test/translate.ur --t2t_usr_dir=./component
